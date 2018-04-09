@@ -99,7 +99,7 @@ sealed case class SvgNoHeight(width: Option[Int], elements: List[Element]) exten
 
   override def ofHeight(height: Int) = CompleteSvg(width, Some(height), elements)
 
-  override def withElement(element: Element): SvgNoHeight = copy(height, element :: elements)
+  override def withElement(element: Element): SvgNoHeight = copy(width, element :: elements)
 
 }
 

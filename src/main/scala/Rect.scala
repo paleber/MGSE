@@ -8,11 +8,35 @@ trait RectProperties extends Element {
   val filled: Option[String]
   val stroked: Option[(String, Int)]
 
-  override def toXml: String =
-    """<rect
-      |  width="700"
-      |  height="400"
-      |  fill="yellow" />""".stripMargin
+  override def toXml: String = {
+
+    val positionAttribute = position.fold("") { p =>
+      s"""
+         |    x="${p._1}"
+         |    y="${p._2}"""".stripMargin
+    }
+
+    val roundedAttribute = rounded.fold("") { r =>
+      s"""
+         |    rx="${r._1}"
+         |    ry="${r._2}"""".stripMargin
+    }
+
+    val filledAttribute = filled.fold("") { f =>
+      s"""
+         |    fill="$f"""".stripMargin
+    }
+
+    val strokeAttribute = stroked.fold("") { s =>
+      s"""
+         |    stroke="${s._1}"
+         |    stroke-width="${s._2}"""".stripMargin
+    }
+
+    s"""<rect
+       |    width="${dimension._1}"
+       |    height="${dimension._2}"$positionAttribute$roundedAttribute$filledAttribute$strokeAttribute />""".stripMargin
+  }
 
 }
 
@@ -54,182 +78,239 @@ case class Rect(width: Int,
   override val filled: Option[String] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def atPosition(x: Int, y: Int) = RectNotRoundedNotFilledNotStroked(dimension, Some((x, y)))
+  override def atPosition(x: Int, y: Int) = RectPositioned(dimension, Some((x, y)))
 
-  override def rounded(r: Int) = RectNoPositionNotFilledNotStroked(dimension, Some((r, r)))
+  override def rounded(r: Int) = RectRounded(dimension, Some((r, r)))
 
-  override def rounded(rx: Int, ry: Int) = RectNoPositionNotFilledNotStroked(dimension, Some((rx, ry)))
+  override def rounded(rx: Int, ry: Int) = RectRounded(dimension, Some((rx, ry)))
 
-  override def filled(color: String) = RectNoPositionNotRoundedNotStroked(dimension, Some(color))
+  override def filled(color: String) = RectFilled(dimension, Some(color))
 
-  override def stroked(color: String, width: Int) = RectNoPositionNotRoundedNotFilled(dimension, Some((color, width)))
+  override def stroked(color: String, width: Int) = RectStroked(dimension, Some((color, width)))
 }
 
 
-case class RectNotRoundedNotFilledNotStroked(dimension: (Int, Int),
-                                             position: Option[(Int, Int)])
+case class RectPositioned(dimension: (Int, Int),
+                          position: Option[(Int, Int)])
   extends RectProperties with NotRounded with NotFilled with NotStroked {
 
   override val rounded: Option[(Int, Int)] = None
   override val filled: Option[String] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def rounded(r: Int) = RectNotFilledNotStroked(dimension, position, Some((r, r)))
+  override def rounded(r: Int) = RectPositionedRounded(dimension, position, Some((r, r)))
 
-  override def rounded(rx: Int, ry: Int) = RectNotFilledNotStroked(dimension, position, Some((rx, ry)))
+  override def rounded(rx: Int, ry: Int) = RectPositionedRounded(dimension, position, Some((rx, ry)))
 
-  override def filled(color: String) = RectNotRoundedNotStroked(dimension, position, Some(color))
+  override def filled(color: String) = RectPositionedFilled(dimension, position, Some(color))
 
-  override def stroked(color: String, width: Int) = RectNotRoundedNotFilled(dimension, position, Some((color, width)))
+  override def stroked(color: String, width: Int) = RectPositionedStroked(dimension, position, Some((color, width)))
 
 }
 
 
-case class RectNoPositionNotFilledNotStroked(dimension: (Int, Int),
-                                             rounded: Option[(Int, Int)])
+case class RectRounded(dimension: (Int, Int),
+                       rounded: Option[(Int, Int)])
   extends RectProperties with NoPosition with NotFilled with NotStroked {
 
   override val position: Option[(Int, Int)] = None
   override val filled: Option[String] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def atPosition(x: Int, y: Int) = RectNotFilledNotStroked(dimension, Some((x, y)), rounded)
+  override def atPosition(x: Int, y: Int) = RectPositionedRounded(dimension, Some((x, y)), rounded)
 
-  override def filled(color: String) = RectNoPositionNotStroked(dimension, rounded, Some(color))
+  override def filled(color: String) = RectRoundedFilled(dimension, rounded, Some(color))
 
-  override def stroked(color: String, width: Int) = RectNoPositionNotFilled(dimension, rounded, Some((color, width)))
+  override def stroked(color: String, width: Int) = RectRoundedStroked(dimension, rounded, Some((color, width)))
 }
 
 
-case class RectNoPositionNotRoundedNotStroked(dimension: (Int, Int),
-                                              filled: Option[String])
+case class RectFilled(dimension: (Int, Int),
+                      filled: Option[String])
   extends RectProperties with NoPosition with NotRounded with NotStroked {
 
   override val position: Option[(Int, Int)] = None
   override val rounded: Option[(Int, Int)] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def atPosition(x: Int, y: Int) = RectNotRoundedNotStroked(dimension, Some((x, y)), filled)
+  override def atPosition(x: Int, y: Int) = RectPositionedFilled(dimension, Some((x, y)), filled)
 
-  override def rounded(r: Int) = RectNoPositionNotStroked(dimension, Some((r, r)), filled)
+  override def rounded(r: Int) = RectRoundedFilled(dimension, Some((r, r)), filled)
 
-  override def rounded(rx: Int, ry: Int) = RectNoPositionNotStroked(dimension, Some((rx, ry)), filled)
+  override def rounded(rx: Int, ry: Int) = RectRoundedFilled(dimension, Some((rx, ry)), filled)
 
-  override def stroked(color: String, width: Int) = RectNoPositionNotRounded(dimension, filled, Some((color, width)))
+  override def stroked(color: String, width: Int) = RectFilledStroked(dimension, filled, Some((color, width)))
 
 }
 
 
-case class RectNoPositionNotRoundedNotFilled(dimension: (Int, Int),
-                                             stroked: Option[(String, Int)])
+case class RectStroked(dimension: (Int, Int),
+                       stroked: Option[(String, Int)])
   extends RectProperties with NoPosition with NotRounded with NotFilled {
 
   override val position: Option[(Int, Int)] = None
   override val rounded: Option[(Int, Int)] = None
   override val filled: Option[String] = None
 
-  override def atPosition(x: Int, y: Int) = RectNotRoundedNotFilled(dimension, Some((x, y)), stroked)
+  override def atPosition(x: Int, y: Int) = RectPositionedStroked(dimension, Some((x, y)), stroked)
 
-  override def rounded(r: Int) = RectNoPositionNotFilled(dimension, Some((r, r)), stroked)
+  override def rounded(r: Int) = RectRoundedStroked(dimension, Some((r, r)), stroked)
 
-  override def rounded(rx: Int, ry: Int) = RectNoPositionNotFilled(dimension, Some((rx, ry)), stroked)
+  override def rounded(rx: Int, ry: Int) = RectRoundedStroked(dimension, Some((rx, ry)), stroked)
 
-  override def filled(color: String) = null //RectNoPositionNotRounded
+  override def filled(color: String) = RectFilledStroked(dimension, Some(color), stroked)
 
 }
 
 
-case class RectNotFilledNotStroked(dimension: (Int, Int),
-                                   position: Option[(Int, Int)],
-                                   rounded: Option[(Int, Int)])
+case class RectPositionedRounded(dimension: (Int, Int),
+                                 position: Option[(Int, Int)],
+                                 rounded: Option[(Int, Int)])
   extends RectProperties with NotFilled with NotStroked {
 
   override val filled: Option[String] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def filled(color: String) = null //RectNotStroked
+  override def filled(color: String) = RectPositionedRoundedFilled(dimension, position, rounded, Some(color))
 
-  override def stroked(color: String, width: Int) = null//RectNotStroked
+  override def stroked(color: String, width: Int) = RectPositionedRoundedStroked(dimension, position, rounded, Some((color, width)))
 }
 
 
-case class RectNotRoundedNotStroked(dimension: (Int, Int),
-                                    position: Option[(Int, Int)],
-                                    filled: Option[String])
+case class RectPositionedFilled(dimension: (Int, Int),
+                                position: Option[(Int, Int)],
+                                filled: Option[String])
   extends RectProperties with NotRounded with NotStroked {
 
   override val rounded: Option[(Int, Int)] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def rounded(r: Int) = null//RectNotStroked
+  override def rounded(r: Int) = RectPositionedRoundedFilled(dimension, position, Some((r, r)), filled)
 
-  override def rounded(rx: Int, ry: Int) = null// RectNotStroked
+  override def rounded(rx: Int, ry: Int) = RectPositionedRoundedFilled(dimension, position, Some((rx, ry)), filled)
 
-  override def stroked(color: String, width: Int) = null//RectNotRounded
+  override def stroked(color: String, width: Int) = RectPositionedFilledStroked(dimension, position, filled, Some((color, width)))
 
 }
 
 
-case class RectNotRoundedNotFilled(dimension: (Int, Int),
-                                   position: Option[(Int, Int)],
-                                   stroked: Option[(String, Int)])
+case class RectPositionedStroked(dimension: (Int, Int),
+                                 position: Option[(Int, Int)],
+                                 stroked: Option[(String, Int)])
   extends RectProperties with NotRounded with NotFilled {
 
   override val rounded: Option[(Int, Int)] = None
   override val filled: Option[String] = None
 
-  override def rounded(r: Int) = null//RectNotFilled
+  override def rounded(r: Int) = RectPositionedRoundedStroked(dimension, position, Some((r, r)), stroked)
 
-  override def rounded(rx: Int, ry: Int) = null// RectNotFilled
+  override def rounded(rx: Int, ry: Int) = RectPositionedRoundedStroked(dimension, position, Some((rx, ry)), stroked)
 
-  override def filled(color: String) = null//RectNotRounded
+  override def filled(color: String) = RectPositionedFilledStroked(dimension, position, Some(color), stroked)
 
 }
 
 
-case class RectNoPositionNotStroked(dimension: (Int, Int),
-                                    rounded: Option[(Int, Int)],
-                                    filled: Option[String])
+case class RectRoundedFilled(dimension: (Int, Int),
+                             rounded: Option[(Int, Int)],
+                             filled: Option[String])
   extends RectProperties with NoPosition with NotStroked {
 
   override val position: Option[(Int, Int)] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def atPosition(x: Int, y: Int) = null// RectNotStroked
+  override def atPosition(x: Int, y: Int) = RectPositionedRoundedFilled(dimension, Some((x, y)), rounded, filled)
 
-  override def stroked(color: String, width: Int) = null//RectNoPosition
+  override def stroked(color: String, width: Int) = RectRoundedFilledStroked(dimension, rounded, filled, Some((color, width)))
+
 }
 
 
-case class RectNoPositionNotFilled(dimension: (Int, Int),
-                                   rounded: Option[(Int, Int)],
-                                   stroked: Option[(String, Int)])
+case class RectRoundedStroked(dimension: (Int, Int),
+                              rounded: Option[(Int, Int)],
+                              stroked: Option[(String, Int)])
   extends RectProperties with NoPosition with NotFilled {
 
   override val position: Option[(Int, Int)] = None
   override val filled: Option[String] = None
 
-  override def atPosition(x: Int, y: Int) = null// RectNotFilled
+  override def atPosition(x: Int, y: Int) = RectPositionedRoundedStroked(dimension, Some((x, y)), rounded, stroked)
 
-  override def filled(color: String) = null//RectNoPosition
+  override def filled(color: String) = RectRoundedFilledStroked(dimension, rounded, Some(color), stroked)
 
 }
 
 
-case class RectNoPositionNotRounded(dimension: (Int, Int),
-                                    filled: Option[String],
-                                    stroked: Option[(String, Int)])
+case class RectFilledStroked(dimension: (Int, Int),
+                             filled: Option[String],
+                             stroked: Option[(String, Int)])
   extends RectProperties with NoPosition with NotRounded {
 
   override val position: Option[(Int, Int)] = None
   override val rounded: Option[(Int, Int)] = None
 
-  override def atPosition(x: Int, y: Int) = null//RectNotRounded
+  override def atPosition(x: Int, y: Int) = RectPositionedFilledStroked(dimension, Some((x, y)), filled, stroked)
 
-  override def rounded(r: Int) = null//RectNoPosition
+  override def rounded(r: Int) = RectRoundedFilledStroked(dimension, Some((r, r)), filled, stroked)
 
-  override def rounded(rx: Int, ry: Int) = null// RectNoPosition
-
+  override def rounded(rx: Int, ry: Int) = RectRoundedFilledStroked(dimension, Some((rx, ry)), filled, stroked)
 
 }
 
+
+case class RectPositionedRoundedFilled(dimension: (Int, Int),
+                                       position: Option[(Int, Int)],
+                                       rounded: Option[(Int, Int)],
+                                       filled: Option[String])
+  extends RectProperties with NotStroked {
+
+  override val stroked: Option[(String, Int)] = None
+
+  override def stroked(color: String, width: Int) = RectComplete(dimension, position, rounded, filled, Some((color, width)))
+
+}
+
+case class RectPositionedRoundedStroked(dimension: (Int, Int),
+                                        position: Option[(Int, Int)],
+                                        rounded: Option[(Int, Int)],
+                                        stroked: Option[(String, Int)])
+  extends RectProperties with NotFilled {
+
+  override val filled: Option[String] = None
+
+  override def filled(color: String) = RectComplete(dimension, position, rounded, Some(color), stroked)
+
+}
+
+
+case class RectPositionedFilledStroked(dimension: (Int, Int),
+                                       position: Option[(Int, Int)],
+                                       filled: Option[String],
+                                       stroked: Option[(String, Int)])
+  extends RectProperties with NotRounded {
+
+  override val rounded: Option[(Int, Int)] = None
+
+  override def rounded(r: Int) = RectComplete(dimension, position, Some((r, r)), filled, stroked)
+
+  override def rounded(rx: Int, ry: Int) = RectComplete(dimension, position, Some((rx, ry)), filled, stroked)
+
+}
+
+case class RectRoundedFilledStroked(dimension: (Int, Int),
+                                    rounded: Option[(Int, Int)],
+                                    filled: Option[String],
+                                    stroked: Option[(String, Int)])
+  extends RectProperties with NoPosition {
+
+  override val position: Option[(Int, Int)] = None
+
+  override def atPosition(x: Int, y: Int) = RectComplete(dimension, Some((x, y)), rounded, filled, stroked)
+
+}
+
+case class RectComplete(dimension: (Int, Int),
+                        position: Option[(Int, Int)],
+                        rounded: Option[(Int, Int)],
+                        filled: Option[String],
+                        stroked: Option[(String, Int)]) extends RectProperties
