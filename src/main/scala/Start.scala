@@ -22,7 +22,7 @@ object Start extends App {
         .to(700, 200)
         .stroked("black", 20)
     ).withElement(
-      Polygon((585, 0),(525, 25),(585, 50))
+      Polygon.firstPoint(585, 0).nextPoint(525, 25).nextPoint(585, 50)
   )
 
 

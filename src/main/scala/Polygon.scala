@@ -6,7 +6,7 @@ trait PolygonProperties extends Element {
   val filled: Option[String]
   val stroked: Option[(String, Int)]
 
-  def atPoint(x: Int, y: Int): PolygonProperties
+  def nextPoint(x: Int, y: Int): PolygonProperties
 
   override def toXml: String = {
 
@@ -51,18 +51,36 @@ trait PolygonExtended {
   val points: List[(Int, Int)] = point :: previousPoints
 }
 
-case class Polygon(firstPoint: (Int, Int), secondPoint: (Int, Int), thirdPoint: (Int, Int)) extends PolygonProperties with PolygonNotFilled with PolygonNotStroked {
+object Polygon {
 
-  override val points: List[(Int, Int)] = List(firstPoint, secondPoint, thirdPoint)
+  def firstPoint(x: Int, y: Int) = PolygonOnePointed((x, y))
+
+}
+
+case class PolygonOnePointed(firstPoint: (Int, Int)) {
+
+  val points = List(firstPoint)
+
+  def nextPoint(x: Int, y: Int) = PolygonTwoPointed(points, (x, y))
+}
+
+case class PolygonTwoPointed(previousPoints: List[(Int, Int)], secondPoint: (Int, Int)) {
+  val points: List[(Int, Int)] = secondPoint :: previousPoints
+
+  def nextPoint(x: Int, y: Int) = PolygonValid(points, (x, y))
+}
+
+case class PolygonValid(previousPoints: List[(Int, Int)], thridPoint: (Int, Int)) extends PolygonProperties with PolygonNotFilled with PolygonNotStroked {
+
+  override val points: List[(Int, Int)] = thridPoint :: previousPoints
   override val filled: Option[String] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def atPoint(x: Int, y: Int) = PolygonSimpleExtended(points, (x, y))
+  override def nextPoint(x: Int, y: Int) = PolygonSimpleExtended(points, (x, y))
 
   override def stroked(color: String, width: Int) = PolygonStroked(points, Some((color, width)))
 
   override def filled(color: String) = PolygonFilled(points, Some(color))
-
 
 }
 
@@ -72,7 +90,7 @@ case class PolygonSimpleExtended(previousPoints: List[(Int, Int)],
   override val filled: Option[String] = None
   override val stroked: Option[(String, Int)] = None
 
-  override def atPoint(x: Int, y: Int) = PolygonSimpleExtended(points, (x, y))
+  override def nextPoint(x: Int, y: Int) = PolygonSimpleExtended(points, (x, y))
 
   override def stroked(color: String, width: Int) = PolygonStroked(points, Some((color, width)))
 
@@ -85,7 +103,7 @@ case class PolygonFilled(points: List[(Int, Int)], filled: Option[String]) exten
 
   override val stroked: Option[(String, Int)] = None
 
-  override def atPoint(x: Int, y: Int) = PolygonFilledExtended(points, (x, y), filled)
+  override def nextPoint(x: Int, y: Int) = PolygonFilledExtended(points, (x, y), filled)
 
   override def stroked(color: String, width: Int) = PolygonComplete(points, filled, Some((color, width)))
 
@@ -97,7 +115,7 @@ case class PolygonFilledExtended(previousPoints: List[(Int, Int)],
 
   override val stroked: Option[(String, Int)] = None
 
-  override def atPoint(x: Int, y: Int) = PolygonFilledExtended(points, (x, y), filled)
+  override def nextPoint(x: Int, y: Int) = PolygonFilledExtended(points, (x, y), filled)
 
   override def stroked(color: String, width: Int) = PolygonComplete(points, filled, Some((color, width)))
 
@@ -108,7 +126,7 @@ case class PolygonStroked(points: List[(Int, Int)], stroked: Option[(String, Int
 
   override val filled: Option[String] = None
 
-  override def atPoint(x: Int, y: Int) = PolygonStrokedExtended(points, (x, y), stroked)
+  override def nextPoint(x: Int, y: Int) = PolygonStrokedExtended(points, (x, y), stroked)
 
   override def filled(color: String) = PolygonComplete(points, Some(color), stroked)
 
@@ -120,7 +138,7 @@ case class PolygonStrokedExtended(previousPoints: List[(Int, Int)],
 
   override val filled: Option[String] = None
 
-  override def atPoint(x: Int, y: Int) = PolygonStrokedExtended(points, (x, y), stroked)
+  override def nextPoint(x: Int, y: Int) = PolygonStrokedExtended(points, (x, y), stroked)
 
   override def filled(color: String): PolygonProperties = PolygonComplete(points, Some(color), stroked)
 
@@ -130,7 +148,7 @@ case class PolygonComplete(points: List[(Int, Int)],
                            filled: Option[String],
                            stroked: Option[(String, Int)]) extends PolygonProperties {
 
-  override def atPoint(x: Int, y: Int) = PolygonCompleteExtended(points, (x, y), filled, stroked)
+  override def nextPoint(x: Int, y: Int) = PolygonCompleteExtended(points, (x, y), filled, stroked)
 }
 
 case class PolygonCompleteExtended(previousPoints: List[(Int, Int)],
@@ -140,5 +158,5 @@ case class PolygonCompleteExtended(previousPoints: List[(Int, Int)],
 
   override val points: List[(Int, Int)] = point :: previousPoints
 
-  override def atPoint(x: Int, y: Int) = PolygonCompleteExtended(points, (x, y), filled, stroked)
+  override def nextPoint(x: Int, y: Int) = PolygonCompleteExtended(points, (x, y), filled, stroked)
 }
