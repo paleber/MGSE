@@ -2,16 +2,29 @@ object Start extends App {
 
 
   val svg = Svg.
-    ofWidth(600)
-
+    ofWidth(700)
+    .ofHeight(400)
     .withElement(
-      Rect(200, 100)
-        .rounded(20, 10)
-        .stroked("blue", 3)
-        .filled("red")
-        .atPosition(x = 20, y = 20)
+      Line
+        .from(180, 370)
+        .to(500, 50)
+        .stroked("black", 15)
     )
-    .ofHeight(800)
+    .withElement(
+      Rect(500, 200)
+        .stroked("black", 20)
+        .filled("white")
+        .atPosition(x = 100, y = 100)
+    )
+    .withElement(
+      Line
+        .from(0, 200)
+        .to(700, 200)
+        .stroked("black", 20)
+    ).withElement(
+      Polygon((585, 0),(525, 25),(585, 50))
+  )
+
 
 
   println(svg.toXml)
