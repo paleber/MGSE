@@ -1,6 +1,6 @@
-package elements
+package dsl.elements
 
-import abstractSyntax._
+import dsl.abstractSyntax._
 
 
 

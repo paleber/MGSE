@@ -1,7 +1,6 @@
-import abstractSyntax.SvgProperties
-import abstractSyntax.NoWidth
-import abstractSyntax.NoHeight
-import abstractSyntax.Element
+package dsl.elements
+
+import dsl.abstractSyntax.{Element, NoHeight, NoWidth, SvgProperties}
 
 
 object Svg extends SvgProperties {
