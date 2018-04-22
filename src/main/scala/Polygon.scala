@@ -24,15 +24,16 @@ trait PolygonProperties extends Element {
     }
 
     val pointsAttribute =
-      s"""points="${
-        points.map { case (x, y) =>
-          s"$x,$y"
-        }.mkString(" ")
-      }""""
+      s"""
+         |    points="${
+            points.map { case (x, y) =>
+              s"$x,$y"
+            }.mkString(" ")
+      }"""".stripMargin
 
     val rotatedAttribute = rotated.fold("") { r =>
       s"""
-         |           transform="rotate(${r._1} ${r._2} ${r._3})"""".stripMargin
+         |    transform="rotate(${r._1} ${r._2} ${r._3})"""".stripMargin
     }
 
     s"""<polygon $pointsAttribute$filledAttribute$strokeAttribute$rotatedAttribute />""".stripMargin
