@@ -1,7 +1,6 @@
-import abstractSyntax.LineNotStroked
-import abstractSyntax.LineProperties
-import abstractSyntax.NoEndPoint
-import abstractSyntax.NoStartPoint
+package dsl.elements
+
+import dsl.abstractSyntax.{LineNotStroked, LineProperties, NoEndPoint, NoStartPoint}
 
 
 object Line extends NoStartPoint {

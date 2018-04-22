@@ -1,6 +1,6 @@
 package transformation
 
-import abstractSyntax.{LineProperties, PolygonProperties, RectProperties, SvgProperties}
+import dsl.abstractSyntax.{LineProperties, PolygonProperties, RectProperties, SvgProperties}
 
 
 object SvgGenerator {
@@ -32,6 +32,10 @@ object SvgGenerator {
        |${children.mkString}
        |</svg>
     """.stripMargin
+
+  }
+
+  def generateXml(svg: SvgProperties): Unit = {
 
   }
 }

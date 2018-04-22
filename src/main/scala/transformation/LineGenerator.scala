@@ -1,6 +1,6 @@
 package transformation
 
-import abstractSyntax.LineProperties
+import dsl.abstractSyntax.LineProperties
 
 object LineGenerator {
 

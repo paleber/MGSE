@@ -1,8 +1,6 @@
-import abstractSyntax.PolygonProperties
-import abstractSyntax.PolygonNotFilled
-import abstractSyntax.PolygonNotStroked
-import abstractSyntax.NotRotated
-import abstractSyntax.PolygonExtended
+package elements
+
+import abstractSyntax._
 
 object Polygon {
 

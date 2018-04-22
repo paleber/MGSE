@@ -1,6 +1,6 @@
 package transformation
 
-import abstractSyntax.PolygonProperties
+import dsl.abstractSyntax.PolygonProperties
 
 object PolygonGenerator {
 

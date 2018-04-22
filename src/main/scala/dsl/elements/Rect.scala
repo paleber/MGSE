@@ -1,8 +1,6 @@
-import abstractSyntax.RectProperties
-import abstractSyntax.NoPosition
-import abstractSyntax.NotRounded
-import abstractSyntax.NotFilled
-import abstractSyntax.NotStroked
+package elements
+
+import abstractSyntax._
 
 
 

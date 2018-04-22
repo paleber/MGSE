@@ -1,6 +1,6 @@
 package transformation
 
-import abstractSyntax.RectProperties
+import dsl.abstractSyntax.RectProperties
 
 object RectGenerator {
 

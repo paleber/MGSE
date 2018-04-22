@@ -1,5 +1,0 @@
-package abstractSyntax
-
-trait RectProperties {
-
-}

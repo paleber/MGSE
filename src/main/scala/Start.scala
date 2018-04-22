@@ -1,7 +1,7 @@
+import dsl.elements.{Line, Polygon, Rect, Svg}
 import transformation.SvgGenerator
 
 object Start extends App {
-
 
   val svg = Svg.
     ofWidth(700)
@@ -35,4 +35,7 @@ object Start extends App {
   val xml = SvgGenerator.toXml(svg)
   println(xml)
 
+
+  val a = <p>Auto</p>
+  println(a)
 }
