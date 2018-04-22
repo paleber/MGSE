@@ -1,0 +1,5 @@
+package abstractSyntax
+
+object LineProperties {
+
+}

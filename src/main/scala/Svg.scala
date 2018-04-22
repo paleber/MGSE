@@ -1,56 +1,7 @@
-
-sealed trait SvgProperties {
-
-  val width: Option[Int]
-  val height: Option[Int]
-  val elements: List[Element]
-
-  def withElement(element: Element): SvgProperties
-
-  def toXml: String = {
-
-    val widthAttribute = width.fold("") { w =>
-      s"""
-         |  width="$w"""".stripMargin
-    }
-
-    val heightAttribute = height.fold("") { h =>
-      s"""
-         |  height="$h"""".stripMargin
-    }
-
-    val children = elements.map(x =>
-      s"""
-         |  ${x.toXml}
-      """.stripMargin)
-
-    s"""<svg xmlns="http://www.w3.org/2000/svg"$widthAttribute$heightAttribute>
-       |${children.mkString}
-       |</svg>
-    """.stripMargin
-
-  }
-
-}
-
-sealed trait NoWidth {
-
-  def ofWidth(width: Int): SvgProperties
-
-}
-
-sealed trait NoHeight {
-
-  def ofHeight(height: Int): SvgProperties
-
-}
-
-trait Element {
-
-  def toXml: String
-
-}
-
+import abstractSyntax.SvgProperties
+import abstractSyntax.NoWidth
+import abstractSyntax.NoHeight
+import abstractSyntax.Element
 
 
 object Svg extends SvgProperties {

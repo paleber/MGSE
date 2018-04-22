@@ -1,69 +1,8 @@
-
-
-trait PolygonProperties extends Element {
-
-  val points: List[(Int, Int)]
-  val filled: Option[String]
-  val stroked: Option[(String, Int)]
-  val rotated: Option[(Int, Int, Int)]
-
-  def nextPoint(x: Int, y: Int): PolygonProperties
-
-  override def toXml: String = {
-
-
-    val filledAttribute = filled.fold("") { f =>
-      s"""
-         |    fill="$f"""".stripMargin
-    }
-
-    val strokeAttribute = stroked.fold("") { s =>
-      s"""
-         |    stroke="${s._1}"
-         |    stroke-width="${s._2}"""".stripMargin
-    }
-
-    val pointsAttribute =
-      s"""
-         |    points="${
-            points.map { case (x, y) =>
-              s"$x,$y"
-            }.mkString(" ")
-      }"""".stripMargin
-
-    val rotatedAttribute = rotated.fold("") { r =>
-      s"""
-         |    transform="rotate(${r._1} ${r._2} ${r._3})"""".stripMargin
-    }
-
-    s"""<polygon $pointsAttribute$filledAttribute$strokeAttribute$rotatedAttribute />""".stripMargin
-  }
-
-}
-
-trait PolygonNotFilled {
-
-  def filled(color: String): PolygonProperties
-
-}
-
-trait PolygonNotStroked {
-
-  def stroked(color: String, width: Int): PolygonProperties
-
-}
-
-trait PolygonExtended {
-  val previousPoints: List[(Int, Int)]
-  val point: (Int, Int)
-
-  val points: List[(Int, Int)] = point :: previousPoints
-}
-
-trait NotRotated {
-
-  def rotate(x: Int, y: Int, z: Int): PolygonProperties
-}
+import abstractSyntax.PolygonProperties
+import abstractSyntax.PolygonNotFilled
+import abstractSyntax.PolygonNotStroked
+import abstractSyntax.NotRotated
+import abstractSyntax.PolygonExtended
 
 object Polygon {
 

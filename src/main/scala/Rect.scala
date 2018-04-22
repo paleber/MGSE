@@ -1,71 +1,9 @@
+import abstractSyntax.RectProperties
+import abstractSyntax.NoPosition
+import abstractSyntax.NotRounded
+import abstractSyntax.NotFilled
+import abstractSyntax.NotStroked
 
-
-trait RectProperties extends Element {
-
-  val dimension: (Int, Int)
-  val position: Option[(Int, Int)]
-  val rounded: Option[(Int, Int)]
-  val filled: Option[String]
-  val stroked: Option[(String, Int)]
-
-  override def toXml: String = {
-
-    val positionAttribute = position.fold("") { p =>
-      s"""
-         |    x="${p._1}"
-         |    y="${p._2}"""".stripMargin
-    }
-
-    val roundedAttribute = rounded.fold("") { r =>
-      s"""
-         |    rx="${r._1}"
-         |    ry="${r._2}"""".stripMargin
-    }
-
-    val filledAttribute = filled.fold("") { f =>
-      s"""
-         |    fill="$f"""".stripMargin
-    }
-
-    val strokeAttribute = stroked.fold("") { s =>
-      s"""
-         |    stroke="${s._1}"
-         |    stroke-width="${s._2}"""".stripMargin
-    }
-
-    s"""<rect
-       |    width="${dimension._1}"
-       |    height="${dimension._2}"$positionAttribute$roundedAttribute$filledAttribute$strokeAttribute />""".stripMargin
-  }
-
-}
-
-
-trait NoPosition {
-
-  def atPosition(x: Int, y: Int): RectProperties
-
-}
-
-trait NotRounded {
-
-  def rounded(radius: Int): RectProperties
-
-  def rounded(radiusX: Int, radiusY: Int): RectProperties
-
-}
-
-trait NotFilled {
-
-  def filled(color: String): RectProperties
-
-}
-
-trait NotStroked {
-
-  def stroked(color: String, width: Int): RectProperties
-
-}
 
 
 case class Rect(width: Int,

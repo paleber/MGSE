@@ -1,53 +1,7 @@
-
-
-trait LineProperties extends Element {
-
-  val from: (Int, Int)
-  val to: (Int, Int)
-  val stroked: Option[(String, Int)]
-
-  override def toXml: String = {
-    val fromAttribute = {
-      s"""
-         |    x1="${from._1}"
-         |    y1="${from._2}"""".stripMargin
-    }
-
-    val toAttribute = {
-      s"""
-         |    x2="${to._1}"
-         |    y2="${to._2}"""".stripMargin
-    }
-
-    val strokeAttribute = stroked.fold("") { s =>
-      s"""
-         |    stroke="${s._1}"
-         |    stroke-width="${s._2}"""".stripMargin
-    }
-
-    s"""<line $fromAttribute$toAttribute$strokeAttribute />""".stripMargin
-  }
-
-
-}
-
-trait NoStartPoint {
-
-  def from(x: Int, y: Int): LineWithStartPoint
-
-}
-
-trait NoEndPoint {
-
-  def to(x: Int, y: Int): LineWithStartAndEndPoint
-
-}
-
-trait LineNotStroked {
-
-  def stroked(color: String, width: Int): LineProperties
-
-}
+import abstractSyntax.LineNotStroked
+import abstractSyntax.LineProperties
+import abstractSyntax.NoEndPoint
+import abstractSyntax.NoStartPoint
 
 
 object Line extends NoStartPoint {

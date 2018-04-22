@@ -1,3 +1,5 @@
+import transformation.SvgGenerator
+
 object Start extends App {
 
 
@@ -30,7 +32,7 @@ object Start extends App {
   )
 
 
-
-  println(svg.toXml)
+  val xml = SvgGenerator.toXml(svg)
+  println(xml)
 
 }
