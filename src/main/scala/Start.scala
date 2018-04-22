@@ -1,3 +1,5 @@
+import java.io.File
+
 import dsl.elements.{Line, Polygon, Rect, Svg}
 import transformation.SvgGenerator
 
@@ -27,15 +29,9 @@ object Start extends App {
       Polygon
         .firstPoint(585, 0)
         .nextPoint(525, 25)
-        .nextPoint(585, 50).rotate(125, 525, 25)
+        .nextPoint(585, 50).rotate(135, 525, 25)
 
   )
 
-
-  val xml = SvgGenerator.toXml(svg)
-  println(xml)
-
-
-  val a = <p>Auto</p>
-  println(a)
+  SvgGenerator.generateXml(svg)
 }

@@ -1,5 +1,7 @@
 package transformation
 
+import java.io.{File, PrintWriter}
+
 import dsl.abstractSyntax.{LineProperties, PolygonProperties, RectProperties, SvgProperties}
 
 
@@ -36,6 +38,8 @@ object SvgGenerator {
   }
 
   def generateXml(svg: SvgProperties): Unit = {
-
+    val writer = new PrintWriter(new File("src\\main\\scala\\xml\\s.svg"))
+    writer.write(SvgGenerator.toXml(svg))
+    writer.close()
   }
 }

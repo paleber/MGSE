@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  width="700"
+  height="400">
+
+  <polygon 
+    points="585,50 525,25 585,0"
+    transform="rotate(135 525 25)" />
+      
+  <line 
+    x1="0"
+    y1="200"
+    x2="700"
+    y2="200"
+    stroke="black"
+    stroke-width="20" />
+      
+  <rect
+    width="500"
+    height="200"
+    x="100"
+    y="100"
+    fill="white"
+    stroke="black"
+    stroke-width="20" />
+      
+  <line 
+    x1="180"
+    y1="370"
+    x2="500"
+    y2="50"
+    stroke="black"
+    stroke-width="15" />
+      
+</svg>
+    
