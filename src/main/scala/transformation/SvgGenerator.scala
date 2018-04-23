@@ -7,6 +7,10 @@ import dsl.abstractSyntax.{LineProperties, PolygonProperties, RectProperties, Sv
 
 object SvgGenerator {
 
+  implicit class ImplicitXmlGenerator(svg: SvgProperties) {
+    def generateXml: String = SvgGenerator.toXml(svg)
+  }
+
   def toXml(svg: SvgProperties): String = {
 
     val widthAttribute = svg.width.fold("") { w =>

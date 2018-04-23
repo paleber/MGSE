@@ -6,7 +6,6 @@ object PolygonGenerator {
 
   def toXml(polygon: PolygonProperties): String = {
 
-
     val filledAttribute = polygon.filled.fold("") { f =>
       s"""
          |    fill="$f"""".stripMargin
@@ -32,5 +31,7 @@ object PolygonGenerator {
     }
 
     s"""<polygon $pointsAttribute$filledAttribute$strokeAttribute$rotatedAttribute />""".stripMargin
+
   }
+
 }

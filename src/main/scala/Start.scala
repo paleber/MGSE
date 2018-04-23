@@ -1,7 +1,6 @@
-import java.io.File
-
 import dsl.elements.{Line, Polygon, Rect, Svg}
 import transformation.SvgGenerator
+import transformation.SvgGenerator.ImplicitXmlGenerator
 
 object Start extends App {
 
@@ -34,4 +33,5 @@ object Start extends App {
   )
 
   SvgGenerator.generateXml(svg)
+  //svg.generateXml
 }

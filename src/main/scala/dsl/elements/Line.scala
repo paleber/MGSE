@@ -12,7 +12,9 @@ object Line extends NoStartPoint {
 case class LineWithStartPoint(from: (Int, Int)) extends NoEndPoint {
 
   override def to(x: Int, y: Int) = LineWithStartAndEndPoint(from, (x, y))
+
 }
+
 
 case class LineWithStartAndEndPoint(from: (Int, Int),
                                     to: (Int, Int))
@@ -26,6 +28,4 @@ case class LineWithStartAndEndPoint(from: (Int, Int),
 
 case class CompleteLine(from: (Int, Int),
                         to: (Int, Int),
-                        stroked: Option[(String, Int)]) extends LineProperties {}
-
-
+                        stroked: Option[(String, Int)]) extends LineProperties

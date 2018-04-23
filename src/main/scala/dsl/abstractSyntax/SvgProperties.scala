@@ -1,5 +1,7 @@
 package dsl.abstractSyntax
 
+trait Element
+
 trait SvgProperties {
 
   val width: Option[Int]
@@ -19,9 +21,5 @@ trait NoWidth {
 trait NoHeight {
 
   def ofHeight(height: Int): SvgProperties
-
-}
-
-trait Element {
 
 }

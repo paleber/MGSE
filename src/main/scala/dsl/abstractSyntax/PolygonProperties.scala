@@ -9,8 +9,6 @@ trait PolygonProperties extends Element {
 
   def nextPoint(x: Int, y: Int): PolygonProperties
 
-
-
 }
 
 trait PolygonNotFilled {
@@ -30,10 +28,11 @@ trait PolygonExtended {
   val point: (Int, Int)
 
   val points: List[(Int, Int)] = point :: previousPoints
+
 }
 
 trait NotRotated {
 
   def rotate(x: Int, y: Int, z: Int): PolygonProperties
-}
 
+}

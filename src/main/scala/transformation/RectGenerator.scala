@@ -33,4 +33,5 @@ object RectGenerator {
        |    width="${rect.dimension._1}"
        |    height="${rect.dimension._2}"$positionAttribute$roundedAttribute$filledAttribute$strokeAttribute />""".stripMargin
   }
+
 }

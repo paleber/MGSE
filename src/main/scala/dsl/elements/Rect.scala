@@ -3,7 +3,6 @@ package dsl.elements
 import dsl.abstractSyntax._
 
 
-
 case class Rect(width: Int,
                 height: Int)
   extends RectProperties with NoPosition with NotRounded with NotFilled with NotStroked {

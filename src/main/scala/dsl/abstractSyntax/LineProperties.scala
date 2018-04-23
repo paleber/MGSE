@@ -6,8 +6,6 @@ trait LineProperties extends Element {
   val to: (Int, Int)
   val stroked: Option[(String, Int)]
 
-
-
 }
 
 trait NoStartPoint {
